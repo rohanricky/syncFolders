@@ -1,11 +1,16 @@
 import tarfile
 
+'''
+Large files may need compression. Something better than this.
+'''
 
 def file_to_compress(file_name):
-    with tarfile.open("sample.tar", "w") as tar:
+    with tarfile.open("sample.tar.gz", "w") as tar:
         tar.add(file_name)
 
-file_to_compress('folderToShare/shit.py')
+
+if __name__=='__main__':
+    file_to_compress('DroidA/how')
 
 '''
 import tarfile

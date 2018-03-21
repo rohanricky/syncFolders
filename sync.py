@@ -33,7 +33,6 @@ def receive_sync():
         f.write(data['data'])
     values = {'id':data['id']}
     t=requests.post(url+'_remove',data=values)
-    print(t.text)
     receive_sync()
 
 if __name__=='__main__':
