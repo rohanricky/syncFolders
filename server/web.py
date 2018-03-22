@@ -38,15 +38,15 @@ def file():
 def create():
     if request.method=='POST':
         try:
-            doc_name, data, doc_id=get_file()
-            print(type(doc_name), file=sys.stdout)
+            doc_name, data, doc_id, doc=get_file()
+            print(type(doc), file=sys.stdout)
         except:
             pass
         try:
             data=data.decode()
         except:
             data=''
-        complete_data = {'name':doc_name,'data':data,'id':doc_id}
+        complete_data = {'name':doc_name,'data':data,'id':doc_id,'doc':doc}
         json_data= json.dumps(complete_data)
         return json_data
 

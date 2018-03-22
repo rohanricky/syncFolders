@@ -1,8 +1,6 @@
 from couchdb import Server, Session
 from io import BytesIO
 
-#from couchdb import json
-
 auth = Session()
 auth.name = "rohan"
 auth.password = "secret"
@@ -16,7 +14,10 @@ doc_id = uuid4().hex
 db[doc_id] = {'type': 'person', 'name': 'John Doe'}
 '''
 
-#sync_folders = ["DroidA","DroidB"]
+sync_folders = ["DroidA","DroidB"]
+'''
+Make this a class
+'''
 
 def store_file(f,folder):
 	file_name=folder+"/"+f.filename
@@ -25,7 +26,6 @@ def store_file(f,folder):
 	for doc_id in db:
 		document=db.get(doc_id,attachments=True)
 		doc_name=document['name']
-		print(doc_name)
 		if doc_name == file_name:
 			db.delete_attachment(document,filename=file_name)
 			db.delete(document)
@@ -41,7 +41,7 @@ def get_file():
 			document=document.read()
 		except:
 			document=''
-		return doc_name,document,doc_id
+		return doc_name,document,doc_id, doc
 
 def clear_files(file_id):
 	rows = db.view('_all_docs', include_docs=True)
@@ -64,16 +64,15 @@ def clear_all_files():
 		docs.append(doc)
 	db.update(docs)
 
-if __name__=='__main__':
+def sync_at_same_time():
 	droidA, droidB = [], []
 	for doc_id in db:
 		doc=db.get(doc_id,attachments=True)
 		doc_name=doc['name']
-		print(doc_name)
-		if doc_name.startswith('DroidA'):
-			droidA.append(doc_name.split("/")[1])
-		elif doc_name.startswith('DroidB'):
-			droidB.append(doc_name.split("/")[1])
+		if doc_name.startswith(sync_folders[0]):
+			sync_folders[0].append(doc_name.split("/")[1])
+		elif doc_name.startswith(sync_folders[1]):
+			sync_folders[1].append(doc_name.split("/")[1])
 	print(droidA)
 	print(droidB)
 	for x in droidA:
@@ -82,38 +81,5 @@ if __name__=='__main__':
 				print('same')
 
 
-
-'''
 if __name__=='__main__':
-	db=couchserver['sync']
-	for doc_id in db:
-		doc=db.get(doc_id,attachments=True)
-		doc_name=doc['name']
-		document=db.get_attachment(doc_id,doc_name)
-		try:
-			doctype=document.read().decode()
-			print(doctype)
-		except:
-			pass
-'''
-'''
-for doc_id in db:
-	doc=db.get(doc_id,attachments=True)
-#		print(doc_id)
-	doc_name=doc['name']
-	print(doc['_attachments'][doc_name]['data'])
-	for single in doc['_attachments']:
-		print(single)
-'''
-'''
-jsondoc=json.encode(doc)
-doc=json.dumps(jsondoc)
-print(doc)
-
-	doc_id, doc_rev = db.save({'key': file_name})
-	print(db[doc_id]['key'])
-
-	with open(db[doc_id]['key'],'w') as fromFile:
-		toFile='DroidB/'
-		fromFile.write(toFile)
-'''
+	clear_all_files()

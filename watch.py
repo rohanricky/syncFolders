@@ -7,6 +7,8 @@ import os
 dir_path = os.path.dirname(os.path.realpath(__file__))
 sync_folders = ["DroidA","DroidB"]
 
+# Watches for changes in below mentioned directories.
+
 class Watcher:
     DIRECTORY_TO_WATCH = dir_path+"/DroidA"
     SECOND = dir_path+"/DroidB"
@@ -28,6 +30,9 @@ class Watcher:
 
         self.observer.join()
 
+'''
+Use send sync method to send to server / to google drive
+'''
 
 class Handler(FileSystemEventHandler):
 
@@ -38,7 +43,7 @@ class Handler(FileSystemEventHandler):
 
         else:
             x=event.src_path.split("/")[-2:][0]
-            send_sync(event.src_path,x)
+            send_sync(event.src_path,x)           #send to server
             if event.event_type == 'created':
                 # Takes action here when a file is first created.
                 print("Received created event - %s." % event.src_path)

@@ -1,4 +1,7 @@
-#To remove all the files from Droid A and Droid B.
+
+'''
+To remove all the files from Droid A and Droid B.
+'''
 
 import subprocess
 

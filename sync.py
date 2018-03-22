@@ -1,6 +1,7 @@
 import requests
 import json
 import sys
+from couchdb.client import Document
 
 sync_folders = ["DroidA","DroidB"]
 
@@ -19,21 +20,26 @@ def receive_sync():
         data=json.loads(r.text)
     except:
         sys.exit()
-    print(data)
     doc_name=data['name'].split("/")[1]
     from_folder=data['name'].split("/")[0]
-    print(data['id'])
 #    print(from_folder)
     if from_folder == sync_folders[0]:
         to_folder=sync_folders[1]
     else:
         to_folder=sync_folders[0]
-    print(to_folder)
-    with open(to_folder+"/"+doc_name,'w') as f:
-        f.write(data['data'])
+    print(data)
+    doc=(data['doc'])
+#    print(doc.save())
+    with open(to_folder+"/"+doc_name,'a') as f:    # use a instead of w to append existing data
+        f.write(data['data'])                      # choose when to delete and when to append
     values = {'id':data['id']}
     t=requests.post(url+'_remove',data=values)
     receive_sync()
+
+def try_sync():
+    r = requests.post(url+"_get")
+    print(r.text)
+
 
 if __name__=='__main__':
     receive_sync()
