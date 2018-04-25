@@ -7,7 +7,7 @@ import configparser
 import sys
 import sqlite3
 from flask_uploads import UploadSet, configure_uploads, DOCUMENTS
-from werkzeug import secure_filename
+#from werkzeug import secure_filename
 from db import store_file,get_file,clear_files
 import sys
 
@@ -27,11 +27,13 @@ app = Flask(__name__)
 @app.route('/file', methods=['POST'])
 def file():
     if request.method=='POST' and 'upload_file' in request.files:
+        print(request.files,file=sys.stdout)
         f = request.files['upload_file']
         x=request.values['folder']
 #        f.save('DroidB/'+secure_filename(f.filename))
         print(x, file=sys.stdout)
         store_file(f,x)
+        print(type(f), file=sys.stdout)
         return f.filename
 
 @app.route('/file_get',methods=['POST'])
@@ -46,7 +48,7 @@ def create():
             data=data.decode()
         except:
             data=''
-        complete_data = {'name':doc_name,'data':data,'id':doc_id,'doc':doc}
+        complete_data = {'name':doc_name,'data':data,'id':doc_id,'doc':doc,'typeOfdoc':str(type(doc))}
         json_data= json.dumps(complete_data)
         return json_data
 

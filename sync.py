@@ -11,13 +11,14 @@ def send_sync(file_name,fold):
     files = {'upload_file': open(file_name,'rb')}
     values = {'DB': 'photcat', 'OUT': 'csv', 'SHORT': 'short','folder':fold}
     r = requests.post(url, files=files, data=values)
-    print(r.text)
+    return files
 
 def receive_sync():
     r = requests.post(url+"_get")
     x=str(r)
     try:
         data=json.loads(r.text)
+        print(data)
     except:
         sys.exit()
     doc_name=data['name'].split("/")[1]

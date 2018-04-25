@@ -82,4 +82,4 @@ def sync_at_same_time():
 
 
 if __name__=='__main__':
-	clear_all_files()
+	sync_at_same_time()

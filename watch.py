@@ -31,6 +31,9 @@ class Watcher:
         self.observer.join()
 
 '''
+join() : This blocks the calling thread until the thread whose join() method is called terminates
+ – either normally or through an unhandled exception or until the optional timeout occurs.
+
 Use send sync method to send to server / to google drive
 '''
 
@@ -43,7 +46,9 @@ class Handler(FileSystemEventHandler):
 
         else:
             x=event.src_path.split("/")[-2:][0]
-            send_sync(event.src_path,x)           #send to server
+            y=send_sync(event.src_path,x)
+            print(y)
+            print(type(y['upload_file']))           #send to server
             if event.event_type == 'created':
                 # Takes action here when a file is first created.
                 print("Received created event - %s." % event.src_path)
